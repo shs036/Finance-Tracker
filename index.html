@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sharma Finance</title>
+<meta name="description" content="Private family finance tracker">
+<meta name="theme-color" content="#07080B">
+<meta name="robots" content="noindex, nofollow">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Finance">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<style>
+@font-face{font-family:R;src:url(roboto-500.woff2) format('woff2');font-display:swap}
+:root{--bg:#07080B;--ink:#F2F0EB;--muted:#8B8F99;--gold:#D4B06A;--blue:#4C8DFF;--line:rgba(255,255,255,.08);--surface:#101218}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:R,system-ui,-apple-system,'Segoe UI',sans-serif}
+body{display:flex;align-items:center;justify-content:center;padding:calc(24px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));
+  background:radial-gradient(600px 380px at 50% 20%,rgba(212,176,106,.16),transparent 60%),radial-gradient(600px 400px at 90% 110%,rgba(76,141,255,.12),transparent 60%),var(--bg)}
+.box{width:100%;max-width:380px;text-align:center}
+.logo{width:112px;height:112px;border-radius:26px;margin:0 auto;box-shadow:0 18px 50px rgba(0,0,0,.55),0 0 50px rgba(212,176,106,.18);animation:pop .6s ease}
+h1{font-weight:400;font-size:26px;margin:22px 0 6px;letter-spacing:.01em}
+p{color:var(--muted);font-size:14.5px;line-height:1.5;margin:0}
+.load{width:120px;height:3px;border-radius:3px;background:var(--line);margin:26px auto 0;overflow:hidden}
+.load i{display:block;height:100%;width:40%;background:var(--gold);border-radius:3px;animation:slide 1s ease-in-out infinite}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:26px;text-align:left}
+.card h2{font-size:15px;font-weight:500;margin:0 0 10px}
+.card ol{margin:0;padding-left:20px;color:var(--muted);font-size:14px;line-height:1.75}
+.card b{color:var(--ink);font-weight:500}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:15px;font:inherit;font-size:15.5px;cursor:pointer;text-decoration:none;text-align:center;margin-top:12px}
+.gold{background:linear-gradient(135deg,#F0DCAE,#BE9A5C);color:#14110A;box-shadow:0 10px 28px rgba(212,176,106,.25)}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.share{display:inline-block;width:16px;height:16px;vertical-align:-3px}
+.foot{margin-top:22px;font-size:11.5px;color:#555A66}
+[hidden]{display:none!important}
+@keyframes pop{from{transform:scale(.8);opacity:0}}
+@keyframes slide{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+</style>
+</head>
+<body>
+<div class="box">
+  <img class="logo" src="icon-512.png" alt="">
+  <h1>Sharma Finance</h1>
+  <p id="sub">Opening your private tracker…</p>
+  <div class="load" id="load"><i></i></div>
+
+  <div id="install" hidden>
+    <div class="card" id="ios" hidden>
+      <h2>Install on iPhone</h2>
+      <ol><li>Tap <b>Share</b> <svg class="share" viewBox="0 0 24 24" fill="none" stroke="#4C8DFF" stroke-width="2" stroke-linecap="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg> at the bottom of Safari</li>
+      <li>Choose <b>Add to Home Screen</b></li><li>Tap <b>Add</b>. Then open <b>Finance</b> from your home screen</li></ol>
+    </div>
+    <div class="card" id="other" hidden>
+      <h2>Install on this phone</h2>
+      <ol><li>Tap <b>Install app</b> below</li><li>Open <b>Finance</b> from your home screen</li></ol>
+      <button class="btn gold" id="installBtn" hidden>Install app</button>
+      <p id="manual" hidden style="margin-top:10px;font-size:13px">If no button appears: tap <b>⋮</b> in Chrome, then <b>Install app</b> or <b>Add to Home screen</b>.</p>
+    </div>
+    <a class="btn ghost" id="openNow">Open without installing</a>
+  </div>
+  <div class="foot">Private · Shubham &amp; Priya only · PIN protected</div>
+</div>
+<script>
+/* ===== the only setting: your web app link ===== */
+const APP_URL='https://script.google.com/macros/s/AKfycbyBicjBsCIKTEjudJHYkEEM2kgzSYnXQoFd06jPXvMADcknCUjog-gTAs5uDQDVfKx2/exec';
+
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+const standalone=window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;
+const ios=/iPhone|iPad|iPod/.test(navigator.userAgent);
+const go=()=>location.replace(APP_URL);
+document.getElementById('openNow').href=APP_URL;
+
+if(standalone){
+  setTimeout(go,650);                       // opened from the home-screen icon: splash, then the app
+}else{
+  document.getElementById('load').hidden=true;
+  document.getElementById('sub').textContent='Install it once and it opens like an app, with its own icon.';
+  document.getElementById('install').hidden=false;
+  document.getElementById(ios?'ios':'other').hidden=false;
+  let deferred=null;
+  window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e;document.getElementById('installBtn').hidden=false;document.getElementById('manual').hidden=true});
+  setTimeout(()=>{if(!deferred&&!ios)document.getElementById('manual').hidden=false},1500);
+  document.getElementById('installBtn').onclick=async()=>{if(!deferred)return;deferred.prompt();const r=await deferred.userChoice;deferred=null;
+    if(r.outcome==='accepted')document.getElementById('sub').textContent='Installed. Open Finance from your home screen.'};
+  window.addEventListener('appinstalled',()=>{document.getElementById('sub').textContent='Installed. Open Finance from your home screen.'});
+}
+</script>
+</body>
+</html>
